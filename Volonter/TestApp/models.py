@@ -14,7 +14,7 @@ class Donate(models.Model):
     endDate = models.TextField()
     title = models.TextField()
     description = models.TextField()
-    totalPrice = models.IntField()
+    totalPrice = models.IntegerField()
     src = models.TextField()
 
 class Users(models.Model):

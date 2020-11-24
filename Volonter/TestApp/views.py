@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from TestApp.models import Events
+from TestApp.models import Donate
 
 def main_page(request):
     return render(request, 'index.html')
@@ -13,6 +14,6 @@ def events_page(request):
 
 def donate_page(request):
     context = dict()
-    history = Events.objects.all()
+    history = Donate.objects.all()
     context['values'] = history
     return render(request, 'Donate.html')
