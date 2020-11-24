@@ -12,4 +12,7 @@ def events_page(request):
     return render(request, 'Events.html', context)
 
 def donate_page(request):
+    context = dict()
+    history = Events.objects.all()
+    context['values'] = history
     return render(request, 'Donate.html')
