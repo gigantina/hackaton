@@ -2,7 +2,8 @@ from django.db import models
 
 class Events(models.Model):
     id = models.AutoField(primary_key=True)
-    date = models.TextField()
+    startDate = models.TextField()
+    endDate = models.TextField()
     title = models.TextField()
     description = models.TextField()
     src = models.TextField()
@@ -13,7 +14,7 @@ class Donate(models.Model):
     endDate = models.TextField()
     title = models.TextField()
     description = models.TextField()
-    totalPrice = models.TextField()
+    totalPrice = models.IntField()
     src = models.TextField()
 
 class Users(models.Model):
@@ -21,7 +22,7 @@ class Users(models.Model):
     name = models.TextField()
     phone = models.TextField()
     address = models.TextField()
-    email = models.TextField()
+    email = models.EmailField()
     password = models.TextField()
 
 
