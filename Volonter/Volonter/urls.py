@@ -19,5 +19,7 @@ from TestApp import views
 
 urlpatterns = [
     path('', views.main_page),
+    path('donate/', views.donate_page),
+    path('events', views.events_page),
     path('admin/', admin.site.urls)
 ]
