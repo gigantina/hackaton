@@ -15,6 +15,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from .forms import LoginForm
+from .forms import EditProfile
 from .forms import RegisterForm
 from django.core.mail import send_mail
 from .forms import CommentsForm
@@ -104,9 +105,6 @@ def logout(request):
     auth_logout(request)
     return render(request, 'index.html');
 
-def check_login(request):
-    if request.user.is_authenticated:
-
 
 
 @login_required
@@ -126,3 +124,22 @@ def comments_page(request):
                 return HttpResponseRedirect('/thanks/')
         else:
             return HttpResponseRedirect('/try again/')
+
+@login_required
+def view_profile(request):
+    args = {'user': request.user}
+    return render(request, 'Profile.html', args)
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = EditProfile(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()бюхз-даукв
+            return redirect('Profile.html')
+
+    else:
+        form = EditProfile(instance=request.user)
+        args = {'form': form}
+        return render(request, 'EditProfile.html', args)
