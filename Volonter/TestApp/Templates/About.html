@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>W3.CSS Template</title>
+<title>About Volunteer</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -29,34 +29,7 @@ body, html {
 <body>
 
 <!-- Navbar (sit on top) -->
-<div class="w3-top">
-  <div class="w3-bar w3-white w3-card" id="myNavbar">
-    <a href="#home" class="w3-bar-item w3-button w3-wide">Volunteering</a>
-    <!-- Right-sided navbar links -->
-    <div class="w3-right w3-hide-small">
-      <a href="#about" class="w3-bar-item w3-button">ДОМ</a>
-      <a href="#team" class="w3-bar-item w3-button"><i class="fa fa-newspaper-o"></i> СОБЫТИЯ</a>
-      <a href="#work" class="w3-bar-item w3-button"><i class="fa fa-th"></i> ДОТАЦИИ</a>
-      <a href="#pricing" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> ПРО НАС</a>
-      <a href="#contact" class="w3-bar-item w3-button"><i class="fa fa-user "></i> ВОЙТИ</a>
-    </div>
-    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
-
-    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
-      <i class="fa fa-bars"></i>
-    </a>
-  </div>
-</div>
-
-<!-- Sidebar on small screens when clicking the menu icon -->
-<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
-  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
-  <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">ДОМ</a>
-  <a href="#team" onclick="w3_close()" class="w3-bar-item w3-button">СОБЫТИЯ</a>
-  <a href="#work" onclick="w3_close()" class="w3-bar-item w3-button">ДОТАЦИИ</a>
-  <a href="#pricing" onclick="w3_close()" class="w3-bar-item w3-button">ПРО НАС</a>
-  <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button">ВОЙТИ</a>
-</nav>
+{% include "Menu.html" %}
 
 
 <!-- About Section -->
@@ -88,43 +61,10 @@ body, html {
 </div>
 
 <!-- Contact Section -->
-<div class="w3-container w3-light-grey" style="padding:128px 16px" id="contact">
-  <h3 class="w3-center">КОНТАКТ</h3>
-  <p class="w3-center w3-large">Есть вопросы или пожелания? Пошлите нам сообщение:</p>
-  <div style="margin-top:48px">
-    <p><i class="fa fa-map-marker fa-fw w3-xxlarge w3-margin-right"></i> Москва, Россия</p>
-    <p><i class="fa fa-phone fa-fw w3-xxlarge w3-margin-right"></i> Телефон: 915 678 7128</p>
-    <p><i class="fa fa-envelope fa-fw w3-xxlarge w3-margin-right"> </i> Почта: volunteermain@vol.com</p>
-    <br>
-    <form action="/action_page.php" target="_blank">
-      <p><input class="w3-input w3-border" type="text" placeholder="Имя" required name="Имя"></p>
-      <p><input class="w3-input w3-border" type="text" placeholder="Email" required name="Email"></p>
-      <p><input class="w3-input w3-border" type="text" placeholder="Тема" required name="Тема"></p>
-      <p><input class="w3-input w3-border" type="text" placeholder="Сообщение" required name="Сообщение"></p>
-      <p>
-        <button class="w3-button w3-black" type="submit">
-          <i class="fa fa-paper-plane"></i> ОТПРАВИТЬ
-        </button>
-      </p>
-    </form>
-    <!-- Image of location/map -->
-    <img src="/w3images/map.jpg" class="w3-image w3-greyscale" style="width:100%;margin-top:48px">
-  </div>
-</div>
+{% include "Comments.html" %}
 
 <!-- Footer -->
-<footer class="w3-center w3-black w3-padding-64">
-  <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
-  <div class="w3-xlarge w3-section">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
-  </div>
-  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
-</footer>
+{% include "Footer.html" %}
  
 <script>
 // Modal Image Gallery
