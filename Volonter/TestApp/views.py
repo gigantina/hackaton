@@ -15,6 +15,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from .forms import LoginForm
 from .forms import RegisterForm
+from django.core.mail import send_mail
+from .forms import CommentsForm
 
 def main_page(request):
     return render(request, 'index.html')
@@ -73,3 +75,23 @@ def register_page(request):
     else:
         form = RegisterForm()
     return render(request, 'Login.html', {'form': form})
+
+@login_required
+def profile_page(request):
+    
+
+
+@login_required
+def comments_page(request):
+    if CommentsForm.is_valid():
+        name = CommentsForm.cleaned_data['cc_myself']
+        email = CommentsForm.cleaned_data['sender']
+        subject = CommentsForm.cleaned_data['subject']
+        message = CommentsForm.cleaned_data['message']
+
+        recipients = ['nstareeva@gmail.com', 'gigandev@gmail.com']
+
+        send_mail(subject, message, email, recipients)
+        return HttpResponseRedirect('/thanks/')
+    else:
+        return HttpResponseRedirect('/try again/')

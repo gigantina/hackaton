@@ -22,4 +22,8 @@ urlpatterns = [
     path('donate/', views.donate_page),
     path('events', views.events_page),
     path('admin/', admin.site.urls)
+	path('login/', auth_views.LoginView.as_view()),
+    path('register/', views.RegisterFormView.as_view()),
+    path('logout/', views.logout_view),
+	path('', include("django.contrib.auth.urls")),
 ]
