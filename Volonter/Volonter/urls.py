@@ -22,5 +22,8 @@ urlpatterns = [
     path('donate/', views.donate_page),
     path('events', views.events_page),
     path('admin/', admin.site.urls),
-    path('events/<int:int>', views.events_page)
+    path('events/<int:pk>', views.event_page),
+    path('book/', views.book),
+    path('login/', views.get_login),
+    path('registration/', views.register_page)
 ]

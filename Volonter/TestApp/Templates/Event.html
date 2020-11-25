@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
-<title>Donate</title>
+<title>Event</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<head>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=1b746561-b6de-4475-ba98-8405ea7722e5&lang=ru_RU&load=Geolink"
+            type="text/javascript"></script>
+
+</head>
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
@@ -26,35 +31,31 @@ body, html {
   padding: 16px;
 }
 
+
+
 </style>
 <body>
 
 {% include "Menu.html" %}
 
+
+<!-- Event Section -->
+{% for item in values%}
 <div class="w3-container" style="padding:128px 16px" id="team">
-    <h3 class="w3-center">ДОТАЦИИ</h3>
-    <p class="w3-center w3-large">Новые пожертвования Москвы</p>
+    <h3 class="w3-center">{{ item.title }}</h3>
+    <p class="w3-center w3-large">{{ item.description }}</p>
     <div class="w3-row-padding w3-grayscale" style="margin-top:64px">
-        {% for item in values %}
-        <div class="w3-col l3 m6 w3-margin-bottom">
-            <div class="w3-card">
-                <img src={{ item.src }} alt="" style="width:100%">
-                <div class="w3-container">
-                    <h3>{{ item.title }}</h3>
-                    <p class="w3-opacity">{{ item.startDate }} - </p>
-                    <p class="w3-opacity">{{ item.endDate }}</p>
-                    <p>{{ item.totalPrice }}</p>
-                    <p>{{ item.description }}</p>
-                    <p>
-                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Помочь</button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+        <img src="{{ item.img }}" alt="" style="width:100%">
+        <form action="book/">
+            <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Записаться
+            </button>
+        </form>
+        <span class="ymaps-geolink w3-block">
+   {{ item.address }}
+</span>
     </div>
 </div>
-
+{% endfor %}
 
 {% include "Footer.html" %}
 

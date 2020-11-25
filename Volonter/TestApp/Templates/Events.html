@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>W3.CSS Template</title>
+<title>Events</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -27,6 +27,11 @@ body, html {
 }
 
 
+
+
+
+
+
 </style>
 <body>
 
@@ -42,7 +47,7 @@ body, html {
         {% for item in values %}
         <div class="w3-col l3 m6 w3-margin-bottom">
             <div class="w3-card">
-                <img src={{ item.src }} alt="" style="width:100%">
+                <img src={{ item.img }} alt="" style="width:100%">
                 <div class="w3-container">
                     <h3>{{ item.title }}</h3>
                     {% if item.endDate == item.startDate%}
@@ -52,7 +57,7 @@ body, html {
                         {{ item.startDate }} - {{ item.endDate }}</p>
                     {% endif %}
                     <p>{{ item.description }}</p>
-                    <form>
+                    <form action="http://localhost:8000/events/{{ item.id }}">
                         <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i>Подробнее
                         </button>
                     </form>
@@ -64,36 +69,6 @@ body, html {
 </div>
 
 {% include "Footer.html" %}
-
-
-<script>
-// Modal Image Gallery
-function onClick(element) {
-  document.getElementById("img01").src = element.src;
-  document.getElementById("modal01").style.display = "block";
-  var captionText = document.getElementById("caption");
-  captionText.innerHTML = element.alt;
-}
-
-
-// Toggle between showing and hiding the sidebar when clicking the menu icon
-var mySidebar = document.getElementById("mySidebar");
-
-function w3_open() {
-  if (mySidebar.style.display === 'block') {
-    mySidebar.style.display = 'none';
-  } else {
-    mySidebar.style.display = 'block';
-  }
-}
-
-// Close the sidebar with the close button
-function w3_close() {
-    mySidebar.style.display = "none";
-}
-
-
-</script>
 
 </body>
 </html>

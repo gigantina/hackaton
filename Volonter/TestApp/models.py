@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
 
 class Events(models.Model):
     id = models.AutoField(primary_key=True)
@@ -6,7 +9,9 @@ class Events(models.Model):
     endDate = models.TextField()
     title = models.TextField()
     description = models.TextField()
-    src = models.TextField()
+    img = models.ImageField(upload_to='upload/', default='static/hehe.jpg')
+    address = models.TextField()
+
 
 class Donate(models.Model):
     id = models.AutoField(primary_key=True)
@@ -15,16 +20,25 @@ class Donate(models.Model):
     title = models.TextField()
     description = models.TextField()
     totalPrice = models.IntegerField()
-    src = models.TextField()
+    img = models.ImageField(upload_to='upload/', default='static/hehe.jpg')
 
-class Users(models.Model):
+
+class Profile(AbstractUser):
     id = models.AutoField(primary_key=True)
-    name = models.TextField()
-    phone = models.TextField()
-    address = models.TextField()
-    email = models.EmailField()
-    password = models.TextField()
+    name = models.TextField(default='None')
+    email = models.EmailField(default='admin@admin.com')
+    password = models.TextField(default='None')
+    phone = models.TextField(default='None')
+    address = models.TextField(default='None')
 
 
-#ie = Events(date='12/12/12', title="Разз ва", description='dfgef', src='123.jpg')
-#ie.save()
+class Booking(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(to=Profile, on_delete=models.SET_NULL, null=True)
+    event_id = models.ForeignKey(to=Events, on_delete=models.SET_NULL, null=True)
+
+
+class Donates(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(to=Profile, on_delete=models.SET_NULL, null=True)
+    donate_id = models.ForeignKey(to=Donate, on_delete=models.SET_NULL, null=True)

@@ -30,6 +30,12 @@ body, html {
 
 
 
+
+
+
+
+
+
 </style>
 <body>
 
@@ -38,21 +44,24 @@ body, html {
 
 <!--Login Section -->
 <div class="w3-container w3-light-grey" style="padding:128px 16px" id="contact">
-    <h3 class="w3-center">ВОЙТИ</h3>
+    <h3 class="w3-center">РЕГИСТРАЦИЯ</h3>
     <div style="margin-top:48px">
+        <div style="margin-top:48px">
 
-        <form action="/login/" method="POST" target="_blank">
-            {% csrf_token %}
-            <p>{% for field in form%}</p>
-            {{field}}
-            {% endfor %}
-
-            <br>
-            <button class="w3-button w3-black" type="submit">
-                <i></i> ВОЙТИ
-            </button>
-        </form>
-        <h3 class="w3-center">НЕТ АККАУНТА? <a href="http://localhost:8000/registration">ЗАРЕГЕСТРИРУЙТЕСЬ!</a></h3>
+            <form action="/registration/" method="POST" target="_blank">
+                {% csrf_token %}
+                <p>{% for field in form%}</p>
+                {{field}}
+                {% endfor %}
+                <br>
+                <button class="w3-button w3-black" type="submit">
+                    <i></i> ЗАРЕГЕСТРИРОВАТЬСЯ
+                </button>
+                </p>
+            </form>
+        </div>
+        <br>
+        <h3 class="w3-center">ЕСТЬ АККАУНТ? <a href="http://localhost:8000/login">ВОЙДИТЕ!</a></h3>
     </div>
 
 
