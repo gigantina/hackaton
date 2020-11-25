@@ -11,12 +11,15 @@ from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from .forms import LoginForm
 from .forms import RegisterForm
 from django.core.mail import send_mail
 from .forms import CommentsForm
+from django.shortcuts import (HttpResponse, render, redirect, get_object_or_404, reverse, get_list_or_404, Http404)
+from django.core.paginator import Paginator
 
 def main_page(request):
     return render(request, 'index.html')
@@ -46,11 +49,10 @@ def get_login(request):
             history = Users.objects.all()
             for(item in history):
                 if ( (item.email==LoginForm.email) and (item.password==LoginForm.password) ):
-                    return HttpResponseRedirect('/Добро пожаловать в личный кабинет/', 'Profile.html')
+                    return HttpResponseRedirect('Profile.html')
                     break
                 else:
                     continue
-
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -78,8 +80,32 @@ def register_page(request):
 
 @login_required
 def profile_page(request):
+    user = get_object_or_404(Users, email=email)
+    # if the profile is private and logged in user is not same as the user being viewed,
+    # show 404 error
+    if user.profile.private and request.user.username != user.username:
+        raise Http404
+
+    # if the profile is not private and logged in user is not same as the user being viewed,
+    # then only show public snippets of the user
+    else:
+        name = user.name
+        email = user.email
+        phone = user.phone
+        address = user.address
+        user.profile.save()
+
+    snippets = Paginate(request, name, email, phone, address, 5)
+
+    return render(request, '', {'snippets': snippets})
+
+
+def logout(request):
+    auth_logout(request)
+    return render(request, 'index.html');
+
+def check_login(request):
     if request.user.is_authenticated:
-        
 
 
 

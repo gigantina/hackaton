@@ -1,14 +1,14 @@
 from django import forms
 
 class LoginForm(forms.Form):
-    email = forms.CharField(label='Email', max_length=100, required=True)
+    email = forms.EmailField(label='Email', max_length=100, required=True)
     password = forms.CharField(label='Password', max_length=100, required=True)
 
 class RegisterForm(forms.Form):
     name = forms.CharField(label='Name', max_length=100, required=True)
     phone = forms.CharField(label='Phone', max_length=100, required=True)
     address = forms.CharField(label='Address', max_length=100, required=True)
-    email = forms.CharField(label='Email', max_length=100, required=True)
+    email = forms.EmailField(label='Email', max_length=100, required=True)
     password = forms.CharField(label='Password', max_length=100, min_value=8, required=True)
 
 class CommentsForm(forms.Form):

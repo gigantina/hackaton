@@ -26,4 +26,5 @@ urlpatterns = [
     path('register/', views.RegisterFormView.as_view()),
     path('logout/', views.logout_view),
 	path('', include("django.contrib.auth.urls")),
+	url(r'^logout', views.logout, name='logout'),
 ]
