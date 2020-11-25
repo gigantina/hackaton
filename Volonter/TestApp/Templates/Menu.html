@@ -3,12 +3,18 @@
         <a href="http://localhost:8000" class="w3-bar-item w3-button w3-wide">Volunteering</a>
         <!-- Ссылки в меню -->
         <div class="w3-right w3-hide-small">
-            <a href="" class="w3-bar-item w3-button">ДОМ</a>
+            <a href="http://localhost:8000/index" class="w3-bar-item w3-button">ДОМ</a>
             <a href="http://localhost:8000/events" class="w3-bar-item w3-button"><i class="fa fa-newspaper-o"></i>
                 СОБЫТИЯ</a>
             <a href="http://localhost:8000/donate" class="w3-bar-item w3-button"><i class="fa fa-th"></i> ДОТАЦИИ</a>
-            <a href="" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> ПРО НАС</a>
-            <a href="http://localhost:8000/login" class="w3-bar-item w3-button"><i class="fa fa-user "></i> ВОЙТИ</a>
+            <a href="http://localhost:8000/about" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> ПРО
+                НАС</a>
+            {% if user.is_authenticated %}
+            <a href="http://localhost:8000/profile" class="w3-bar-item w3-button"><i class="fa fa-user "></i> ПРИВЕТ
+            </a>
+            {% else %}
+            <a href="http://localhost:8000/login" class="w3-bar-item w3-button"><i class="fa fa-user "></i> ВОЙТИ </a>
+            {% endif %}
         </div>
         <!-- Показ "гамбургера" вместо меню на маленьких экранах -->
 
@@ -22,10 +28,15 @@
 <!-- Меню для маленьких экранов -->
 <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none"
      id="mySidebar">
+
     <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
-    <a href="" onclick="w3_close()" class="w3-bar-item w3-button"> ДОМ</a>
+    <a href="http://localhost:8000/index" onclick="w3_close()" class="w3-bar-item w3-button"> ДОМ</a>
     <a href="http://localhost:8000/events" onclick="w3_close()" class="w3-bar-item w3-button"> СОБЫТИЯ</a>
     <a href="http://localhost:8000/donate" onclick="w3_close()" class="w3-bar-item w3-button"> ДОТАЦИИ/a>
-        <a href="" onclick="w3_close()" class="w3-bar-item w3-button"> ПРО НАС</a>
-        <a href="http://localhost:8000/login" onclick="w3_close()" class="w3-bar-item w3-button"> ВОЙТИ</a>
+        <a href="http://localhost:8000/about" onclick="w3_close()" class="w3-bar-item w3-button"> ПРО НАС</a>
+        {% if user.is_authenticated %}
+        <a href="http://localhost:8000/profile" class="w3-bar-item w3-button"><i class="fa fa-user "></i> ПРИВЕТ </a>
+        {% else %}
+        <a href="http://localhost:8000/login" class="w3-bar-item w3-button"><i class="fa fa-user "></i> ВОЙТИ </a>
+        {% endif %}
 </nav>
