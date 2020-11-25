@@ -78,20 +78,25 @@ def register_page(request):
 
 @login_required
 def profile_page(request):
-    
+    if request.user.is_authenticated:
+        
+
 
 
 @login_required
 def comments_page(request):
-    if CommentsForm.is_valid():
-        name = CommentsForm.cleaned_data['cc_myself']
-        email = CommentsForm.cleaned_data['sender']
-        subject = CommentsForm.cleaned_data['subject']
-        message = CommentsForm.cleaned_data['message']
+    if request.method == 'POST':
+        f = CommentsForm(request, request.POST)
+        if f.is_valid():
+            if request.user.is_authenticated:
+                name = CommentsForm.cleaned_data['cc_myself']
+                email = CommentsForm.cleaned_data['sender']
+                subject = CommentsForm.cleaned_data['subject']
+                message = CommentsForm.cleaned_data['message']
 
-        recipients = ['nstareeva@gmail.com', 'gigandev@gmail.com']
+                recipients = ['nstareeva@gmail.com', 'gigandev@gmail.com']
 
-        send_mail(subject, message, email, recipients)
-        return HttpResponseRedirect('/thanks/')
-    else:
-        return HttpResponseRedirect('/try again/')
+                send_mail(subject, message, email, recipients)
+                return HttpResponseRedirect('/thanks/')
+        else:
+            return HttpResponseRedirect('/try again/')
