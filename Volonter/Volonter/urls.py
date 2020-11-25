@@ -21,5 +21,6 @@ urlpatterns = [
     path('', views.main_page),
     path('donate/', views.donate_page),
     path('events', views.events_page),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+    path('events/<int:int>', views.events_page)
 ]

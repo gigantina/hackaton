@@ -26,6 +26,7 @@ body, html {
   padding: 16px;
 }
 
+
 </style>
 <body>
 
@@ -44,16 +45,16 @@ body, html {
                 <div class="w3-container">
                     <h3>{{ item.title }}</h3>
                     {% if item.endDate == item.startDate%}
-                        <p class="w3-opacity">{{ item.startDate}}</p>
+                    <p class="w3-opacity">{{ item.startDate}}</p>
                     {% else %}
-                        <p class="w3-opacity">
-                            {{ item.startDate }} - {{ item.endDate }}</p>
+                    <p class="w3-opacity">
+                        {{ item.startDate }} - {{ item.endDate }}</p>
                     {% endif %}
                     <p>{{ item.description }}</p>
-                    <p>
-                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i>Записаться
+                    <form>
+                        <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i>Подробнее
                         </button>
-                    </p>
+                    </form>
                 </div>
             </div>
         </div>
@@ -89,6 +90,7 @@ function w3_open() {
 function w3_close() {
     mySidebar.style.display = "none";
 }
+
 
 </script>
 
