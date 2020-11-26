@@ -46,7 +46,7 @@ class CommentsForm(forms.Form):
     message = forms.CharField(label='Message', max_length=300, required=True)
 
 
-class EditProfile(RegisterForm):
+class EditProfile(RegisterForm, forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('name', 'email', 'phone', 'address', 'password')

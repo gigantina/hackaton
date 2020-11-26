@@ -19,7 +19,6 @@ from django.contrib.auth import logout
 from .forms import LoginForm
 from .forms import EditProfile
 from .forms import RegisterForm
-from .forms import EventForm
 from django.core.mail import send_mail
 from .forms import CommentsForm
 from django.shortcuts import (HttpResponse, render, redirect, get_object_or_404, reverse, get_list_or_404, Http404)
@@ -185,7 +184,8 @@ def edit_profile(request):
 
         if form.is_valid():
             form.save()
-            return redirect('Profile.html')
+            return redirect('/account/edit/')
+        return redirect('/account/edit/')
 
     else:
         form = EditProfile(instance=request.user)
