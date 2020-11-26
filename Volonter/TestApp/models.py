@@ -1,6 +1,17 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+
+
+class Profile(AbstractUser):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(default='', max_length=30)
+    email = models.EmailField(default='')
+    username = models.CharField(unique=True, max_length=20)
+    password = models.CharField(default='', max_length=20)
+    phone = models.CharField(default='', max_length=16)
+    address = models.TextField(default='')
 
 
 class CategoryHelp(models.Model):
@@ -18,6 +29,7 @@ class Event(models.Model):
     img = models.ImageField(blank=True, upload_to='images/')
     address = models.TextField()
     category_help = models.ForeignKey(to=CategoryHelp, on_delete=models.SET_NULL, null=True)
+    owner = models.ForeignKey(to=Profile, on_delete=models.SET_NULL, default=1, null=True)
 
 
 class Donate(models.Model):
@@ -29,16 +41,6 @@ class Donate(models.Model):
     long_description = models.TextField(null=True)
     totalPrice = models.IntegerField()
     img = models.ImageField(blank=True, upload_to='images/')
-
-
-class Profile(AbstractUser):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(default='', max_length=30)
-    email = models.EmailField(default='')
-    username = models.CharField(unique=True, max_length=20)
-    password = models.CharField(default='', max_length=20)
-    phone = models.CharField(default='', max_length=16)
-    address = models.TextField(default='')
 
 
 class Achievment(models.Model):
@@ -70,5 +72,3 @@ class UuidAndEmail(models.Model):
     uuid = models.CharField(max_length=60)
     email = models.CharField(max_length=200)
     action = models.IntegerField()
-
-

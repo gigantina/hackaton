@@ -36,6 +36,14 @@ body, html {
 
 
 
+
+
+
+
+
+
+
+
 </style>
 <body>
 
@@ -53,8 +61,35 @@ body, html {
             <br>
             <p><a href="/logout" class="w3-button w3-black"><i class="fa fa-th"> </i> Выйти</a></p>
             <p><a href="edit/" class="w3-button w3-black"><i class="fa fa-th"> </i> Изменить Профиль</a></p>
-             <p><a href="achieve/" class="w3-button w3-black"><i class="fa fa-th"> </i> Достижения</a></p>
+            <p><a href="achieve/" class="w3-button w3-black"><i class="fa fa-th"> </i> Достижения</a></p>
             <br><br>
+            {% if user.is_superuser %}
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Название</th>
+                    <th>Волонтер</th>
+                    <th>Телефон</th>
+                    <th>Email</th>
+                    <th>Удалить</th>
+                </tr>
+                </thead>
+                {% for item in events %}
+                <tr>
+                    <td>{{ item.event_id.title }}</td>
+                    <td>{{ item.user_id.name }}</td>
+                    <td>{{ item.user_id.telephone }}</td>
+                    <td>{{ item.user_id.email }}</td>
+                </tr>
+                <td>
+                    <form action="book/" method="GET">
+                        <button type="submit" class="btn btn-warning" name="delete" value="{{ item.id }}">Delete
+                        </button>
+                    </form>
+                </td>
+                {% endfor %}
+            </table>
+            {% else %}
             <h3>Ваши События</h3>
             <table class="table">
                 <thead class="thead-dark">
@@ -63,6 +98,7 @@ body, html {
                     <th>Дата начала</th>
                     <th>Дата конца</th>
                     <th>Адрес</th>
+                    <th>Удалить</th>
                 </tr>
                 </thead>
                 {% for item in events %}
@@ -71,9 +107,16 @@ body, html {
                     <td>{{ item.event_id.startDate }}</td>
                     <td>{{ item.event_id.endDate }}</td>
                     <td>{{ item.event_id.address }}</td>
+                    <td>
+                        <form action="/events/book/" method="GET">
+                            <button type="submit" class="btn btn-warning" name="delete" value="{{ item.id }}">Delete
+                            </button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </table>
+            {% endif %}
         </div>
         <div class="w3-col m6">
             <img class="w3-image w3-round-large"

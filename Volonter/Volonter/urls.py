@@ -21,6 +21,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import url
 import notifications.urls
+from django.contrib.auth import views as auth_views
+from django.conf.urls import url
 
 urlpatterns = [
     url('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
@@ -28,7 +30,7 @@ urlpatterns = [
     path('events/', views.events_page),
     path('admin/', admin.site.urls),
     path('events/<int:pk>/', views.event_page),
-    path('events/book/<int:ides>', views.book),
+    path('events/book/<str:ides>', views.book),
     path('events/cat/<int:pk>/', views.event_category),
     path('login/', views.get_login),
     path('registration/', views.register_page),
@@ -40,7 +42,17 @@ urlpatterns = [
     path('about/', views.about_page),
     path('account/achieve/', views.achievements_user),
     path('registration/wait/', views.reg_wait),
-    path('registration/wait/<str:uu>/', views.complete_reg)
+    path('registration/wait/<str:uu>/', views.complete_reg),
+    path("password_reset/", views.password_reset_request, name="password_reset"),
+    path('password_reset/done/',
+         auth_views.PasswordResetDoneView.as_view(template_name='password_reset_sent.html'),
+         name='password_reset_done'),
+    path('reset/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_confirm.html"),
+         name='password_reset_confirm'),
+    path('reset/done/',
+         auth_views.PasswordResetCompleteView.as_view(template_name='password_reset.html'),
+         name='password_reset_complete'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

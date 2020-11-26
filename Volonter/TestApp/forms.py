@@ -1,6 +1,55 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import Profile
+from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Password confirmation", widget=forms.PasswordInput)
+
+    password1.widget.attrs.update({'class': 'w3-input w3-border', 'required': 'required', 'placeholder': 'Пароль'})
+    password2.widget.attrs.update(
+        {'class': 'w3-input w3-border', 'required': 'required', 'placeholder': 'Подтверждение пароля'})
+
+    def clean_password2(self):
+        # Check that the two password entries match
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('Passwords do not match')
+        elif password1 and password2 and password1 == password2:
+            if len(password1) < 8:
+                raise forms.ValidationError('The password must be at least 8 characters long')
+            flag = True
+            for char in password1:
+                if char.isdigit():
+                    flag = False
+            if flag:
+                raise forms.ValidationError('Password must contain at least one digits')
+
+        return password2
+
+    def save(self, commit=True):
+        user = super(CustomPasswordChangeForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return user
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(label='', widget=forms.EmailInput(attrs={
+        'class': 'w3-input w3-border',
+        'placeholder': 'Email',
+        'type': 'email',
+        'name': 'email'
+    }))
+
+    class Meta:
+        model = Profile
+        fields = ('email')
 
 
 class CustomUserCreationForm(UserCreationForm):

@@ -5,22 +5,23 @@ from TestApp.models import Donate
 from TestApp.models import Profile
 from TestApp.models import Bookings_From_User, CategoryHelp, UuidAndEmail, Achievment, Achievments_From_User
 from .mail import *
-
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
-from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView, CreateView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth import logout
 from .forms import LoginForm
 from .forms import EditProfile
-from .forms import RegisterForm
+from .forms import RegisterForm, CustomPasswordResetForm, CustomUserChangeForm, CustomPasswordChangeForm
 from django.core.mail import send_mail
 from .forms import CommentsForm
 from django.shortcuts import (HttpResponse, render, redirect, get_object_or_404, reverse, get_list_or_404, Http404)
@@ -28,6 +29,52 @@ from django.core.paginator import Paginator
 from django.contrib.auth import login
 from .auth import MyBackend
 from notifications.signals import notify
+from .Reset import PasswordResetForm
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.models import User
+from django.template.loader import render_to_string
+from django.db.models.query_utils import Q
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
+from django.contrib import messages
+from .achievments import get_num_events
+
+
+def password_reset_request(request):
+    if request.method == "POST":
+        password_reset_form = CustomPasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = Profile.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+
+                    print('ok')
+                    subject = "Password Reset Requested"
+                    email_template_name = "password_reset_email.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_some_mail(email, user.email)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("/password_reset/done/")
+    password_reset_form = CustomPasswordResetForm()
+    return render(request=request, template_name="password_reset.html",
+                  context={"form": password_reset_form})
 
 
 def main_page(request):
@@ -57,12 +104,16 @@ def event_page(request, pk):
 
 @login_required
 def book(request, ides):
-    ides = str(ides)
+    ides = str(ides).split(';')
     user_id, event_id = int(ides[0]), int(ides[1])
     user = Profile.objects.get(id=user_id)
     event = Event.objects.get(id=event_id)
     item = Bookings_From_User(event_id=event, user_id=user)
     item.save()
+    if get_num_events(user) == 1:
+        achieve = Achievments_From_User(user_id=user, achive_id=Achievment.objects.get(id=2))
+        achieve.save()
+
     return redirect('/events')
 
 
@@ -169,7 +220,7 @@ def register_page(request):
 
             achieve_from_user = Achievments_From_User(user_id=user, achive_id=achieve)
             achieve_from_user.save()
-            registration('natalyastareeva@gmail.com', email, name, f'http://localhost:8000/registration/wait/{uu}')
+            registration(email, name, a=f'http://localhost:8000/registration/wait/{uu}')
             return HttpResponseRedirect(f'wait/', 'Profile.html')
         else:
             print(form)
@@ -200,11 +251,13 @@ def profile_page(request):
     user = get_object_or_404(Profile, id=request.user.id)
     context = dict()
     context['values'] = user
-    print(context['values'])
-    # user.profile.save()
-    a = Bookings_From_User.objects.filter(user_id=user)
-    for i in a:
-        print(i)
+    if user.is_superuser:
+        a = []
+        events = Event.objects.filter(owner=user.id)
+        for event in events:
+            a += Bookings_From_User.objects.filter(event_id=event.id)
+    else:
+        a = Bookings_From_User.objects.filter(user_id=user)
     context['events'] = a
 
     return render(request, 'Profile.html', context)
@@ -213,25 +266,6 @@ def profile_page(request):
 def logout(request):
     auth_logout(request)
     return redirect('/')
-
-
-@login_required
-def comments_page(request):
-    if request.method == 'POST':
-        f = CommentsForm(request, request.POST)
-        if f.is_valid():
-            if request.user.is_authenticated:
-                name = CommentsForm.cleaned_data['cc_myself']
-                email = CommentsForm.cleaned_data['sender']
-                subject = CommentsForm.cleaned_data['subject']
-                message = CommentsForm.cleaned_data['message']
-
-                recipients = ['nstareeva@gmail.com', 'gigandev@gmail.com']
-
-                send_mail(subject, message, email, recipients)
-                return HttpResponseRedirect('/thanks/')
-        else:
-            return HttpResponseRedirect('/try again/')
 
 
 @login_required
@@ -248,3 +282,20 @@ def edit_profile(request):
         form = EditProfile(instance=request.user)
         args = {'form': form}
         return render(request, 'EditProfile.html', args)
+
+
+###### CHANGE PASSWORD
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('/profile')
+        else:
+            return redirect('/change_password')
+    else:
+        form = PasswordChangeForm(user=request.user)
+        args = {'form': form}
+        return render(request, '/change_password', args)
