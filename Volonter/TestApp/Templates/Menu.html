@@ -3,10 +3,10 @@
         <a href="http://localhost:8000" class="w3-bar-item w3-button w3-wide">Volunteering</a>
         <!-- Ссылки в меню -->
         <div class="w3-right w3-hide-small">
-            <a href="http://localhost:8000/index" class="w3-bar-item w3-button">ДОМ</a>
+            <a href="http://localhost:8000" class="w3-bar-item w3-button">ДОМ</a>
             <a href="http://localhost:8000/events" class="w3-bar-item w3-button"><i class="fa fa-newspaper-o"></i>
                 СОБЫТИЯ</a>
-            <a href="http://localhost:8000/donate" class="w3-bar-item w3-button"><i class="fa fa-th"></i> ДОТАЦИИ</a>
+            <a href="http://localhost:8000/donates" class="w3-bar-item w3-button"><i class="fa fa-th"></i> ДОТАЦИИ</a>
             <a href="http://localhost:8000/about" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> ПРО
                 НАС</a>
             {% if user.is_authenticated %}
@@ -30,7 +30,7 @@
      id="mySidebar">
 
     <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
-    <a href="http://localhost:8000/index" onclick="w3_close()" class="w3-bar-item w3-button"> ДОМ</a>
+    <a href="http://localhost:8000" onclick="w3_close()" class="w3-bar-item w3-button"> ДОМ</a>
     <a href="http://localhost:8000/events" onclick="w3_close()" class="w3-bar-item w3-button"> СОБЫТИЯ</a>
     <a href="http://localhost:8000/donates" onclick="w3_close()" class="w3-bar-item w3-button"> ДОТАЦИИ</a>
         <a href="http://localhost:8000/about" onclick="w3_close()" class="w3-bar-item w3-button"> ПРО НАС</a>

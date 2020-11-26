@@ -14,25 +14,33 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
 from TestApp import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import url
+import notifications.urls
 
 urlpatterns = [
-
+    url('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
     path('', views.main_page),
     path('events/', views.events_page),
     path('admin/', admin.site.urls),
     path('events/<int:pk>/', views.event_page),
     path('events/book/<int:ides>', views.book),
+    path('events/cat/<int:pk>/', views.event_category),
     path('login/', views.get_login),
     path('registration/', views.register_page),
     path('account/', views.profile_page),
     path('account/edit/', views.edit_profile),
     path('logout/', views.logout),
     path('donates/', views.donates_page),
-    path('donates/<int:pk>/', views.donate_page)
+    path('donates/<int:pk>/', views.donate_page),
+    path('about/', views.about_page),
+    path('account/achieve/', views.achievements_user),
+    path('registration/wait/', views.reg_wait),
+    path('registration/wait/<str:uu>/', views.complete_reg)
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

@@ -23,20 +23,52 @@ class LoginForm(forms.Form):
     password.widget.attrs.update({'class': 'w3-input w3-border', 'required': 'required', 'placeholder': 'Пароль'})
 
 
-class RegisterForm(forms.Form):
-    name = forms.CharField(max_length=100, required=True)
-    phone = forms.CharField(max_length=100, required=True)
-    address = forms.CharField(max_length=100, required=True)
-    email = forms.CharField(max_length=100, required=True)
-    password = forms.CharField(max_length=100, min_length=8, required=True)
+class RegisterForm(forms.ModelForm):
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Password confirmation", widget=forms.PasswordInput)
 
-    name.widget.attrs.update(
-        {'class': 'w3-input w3-border', 'required': 'required', 'placeholder': 'ФИО'})
-    phone.widget.attrs.update({'class': 'w3-input w3-border', 'required': 'required', 'placeholder': 'Телефон'})
-    address.widget.attrs.update(
-        {'class': 'w3-input w3-border', 'required': 'required', 'placeholder': 'Адрес регистрации'})
-    email.widget.attrs.update({'class': 'w3-input w3-border', 'required': 'required', 'placeholder': 'Email'})
-    password.widget.attrs.update({'class': 'w3-input w3-border', 'required': 'required', 'placeholder': 'Пароль'})
+    password1.widget.attrs.update({'class': 'w3-input w3-border', 'required': 'required', 'placeholder': 'Пароль'})
+    password2.widget.attrs.update(
+        {'class': 'w3-input w3-border', 'required': 'required', 'placeholder': 'Подтверждение пароля'})
+
+    class Meta:
+        model = Profile
+
+        fields = ('name', "email", 'phone', 'address')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'w3-input w3-border', 'placeholder': 'ФИО'}),
+            'email': forms.TextInput(attrs={'class': 'w3-input w3-border', 'placeholder': 'Email'}),
+            'phone': forms.TextInput(attrs={'class': 'w3-input w3-border', 'placeholder': 'Телефон'}),
+            'address': forms.TextInput(attrs={'class': 'w3-input w3-border', 'placeholder': 'Адрес'}),
+            'password1': forms.TextInput(attrs={'class': 'w3-input w3-border'}),
+            'password2': forms.TextInput(attrs={'class': 'w3-input w3-border'})
+        }
+
+    def clean_password2(self):
+        # Check that the two password entries match
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('Passwords do not match')
+        elif password1 and password2 and password1 == password2:
+            if len(password1) < 8:
+                raise forms.ValidationError('The password must be at least 8 characters long')
+            flag = True
+            for char in password1:
+                if char.isdigit():
+                    flag = False
+            if flag:
+                raise forms.ValidationError('Password must contain at least one digits')
+
+        return password2
+
+    def save(self, commit=True):
+        user = super(RegisterForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return user
 
 
 class CommentsForm(forms.Form):
@@ -49,4 +81,12 @@ class CommentsForm(forms.Form):
 class EditProfile(RegisterForm, forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('name', 'email', 'phone', 'address', 'password')
+        fields = ('name', 'email', 'phone', 'address')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'w3-input w3-border', 'placeholder': 'ФИО'}),
+            'email': forms.TextInput(attrs={'class': 'w3-input w3-border', 'placeholder': 'Email'}),
+            'phone': forms.TextInput(attrs={'class': 'w3-input w3-border', 'placeholder': 'Телефон'}),
+            'address': forms.TextInput(attrs={'class': 'w3-input w3-border', 'placeholder': 'Адрес'}),
+            'password1': forms.TextInput(attrs={'class': 'w3-input w3-border'}),
+            'password2': forms.TextInput(attrs={'class': 'w3-input w3-border'})
+        }

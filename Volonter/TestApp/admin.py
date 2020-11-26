@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import Profile, Event, Donate, Donates_From_User, Bookings_From_User
+from .models import *
 
 
 class CustomUserAdmin(UserAdmin):
@@ -18,3 +18,6 @@ admin.site.register(Event)
 admin.site.register(Donate)
 admin.site.register(Donates_From_User)
 admin.site.register(Bookings_From_User)
+admin.site.register(CategoryHelp)
+admin.site.register(Achievment)
+admin.site.register(Achievments_From_User)
