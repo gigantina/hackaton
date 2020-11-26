@@ -56,7 +56,7 @@ class Post(models.ModelForm):
         #ie = Events(date='12/12/12', title="Разз ва", description='dfgef', src='123.jpg')
 #ie.save()
 
-######OR THIS WAY
+######OR THIS WAY COMMENTS
 class Comment(model.Models):
     post = models.ForeignKey(Post, related_name=post)
     name = models.CharField()

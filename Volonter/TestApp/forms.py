@@ -37,7 +37,7 @@ class EditProfile(RegisterForm):
         fields = ('name', 'email', 'phone', 'address', 'password')
 
 
- #######Or this way
+ #######Or this way COMMENTS
  class CommentFrom(forms.ModelForm):
      class Meta:
          model = Comment

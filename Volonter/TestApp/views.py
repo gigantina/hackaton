@@ -15,9 +15,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth import logout
-from .forms import LoginForm
+from .forms import LoginForm, PasswordChangeForm
 from .forms import EditProfile
 from .forms import RegisterForm
 from .forms import CommentForm
@@ -171,10 +172,26 @@ def comments_show(request):
     context['values'] = history
     return render(request, 'Comments.html', context)
 
-####### OR THIS WAY
+####### OR THIS WAY COMMENTS
 class AddCommentView(CreateView):
     model = Comment
     form_class = CommentForm
     template_name = 'add_comment.html'
     success_url = reverse_lazy('About.html')
+
+###### CHANGE PASSWORD
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user = request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('/profile')
+        else:
+            return redirect('/change_password')
+    else:
+        form = PasswordChangeForm(user=request.user)
+        args = {'form': form}
+        return render(request, '/change_password', args)
 
