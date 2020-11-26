@@ -46,11 +46,7 @@ class CommentsForm(forms.Form):
     message = forms.CharField(label='Message', max_length=300, required=True)
 
 
-class EventForm(forms.Form):
-    startDate = forms.CharField(label='Начальная дата')
-    endDate = forms.CharField(label='Конечная дата', required=False)
-    title = forms.CharField(label='Заголовок', required=True)
-    description = forms.CharField(label='Краткое описание', required=True)
-    long_description = forms.CharField(label='Длинное описание', required=False)
-    img = forms.CharField(label='Изображение', required=True)
-    address = forms.CharField(label='Адрес проведения', required=True)
+class EditProfile(RegisterForm):
+    class Meta:
+        model = Profile
+        fields = ('name', 'email', 'phone', 'address', 'password')
