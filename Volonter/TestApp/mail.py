@@ -10,7 +10,7 @@ def get_uuid():
     return str(uuid.uuid4())
 
 
-def registration(from_, to, password, name, a, action=0):
+def registration(from_, to, name, a, action=0, password='mockba91'):
     msg = email.message.Message()
     if action == 0:
         subj = 'Registration'
@@ -21,7 +21,8 @@ def registration(from_, to, password, name, a, action=0):
     msg['From'] = from_
     msg['To'] = to
     password = password
-    email_content = f'Здравствуй, {name}! Приветствуем тебя на нашем сайте волонтеров! Надеюсь, тебе понравится в нашей команде! {a}'
+    email_content = f'Здравствуй, {name}! Приветствуем тебя на нашем сайте волонтеров!\nНадеюсь, тебе понравится в нашей \
+    команде!\nПерейдите по ссылке, чтобы подтвердить регистрацию\n{a}'
 
     msg.set_payload(email_content)
 

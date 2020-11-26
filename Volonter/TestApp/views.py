@@ -153,7 +153,7 @@ def register_page(request):
             uu = get_uuid()
             item = UuidAndEmail(uuid=uu, email=email, action=0)
             item.save()
-            registration('natalyastareeva@gmail.com', email, 'mockba91', name, f'http://localhost:8000/{uu}')
+            registration('natalyastareeva@gmail.com', email, name, f'http://localhost:8000/registration/wait/{uu}')
             return HttpResponseRedirect(f'wait/', 'Profile.html')
         else:
             print(form)
