@@ -28,7 +28,7 @@ body, html {
 </style>
 <body>
 
-{% include "Menu.html" %}
+
 
 <!-- Contact Section -->
 <div class="w3-container w3-light-grey" style="padding:128px 16px" id="contact">
@@ -41,7 +41,8 @@ body, html {
       <p><input class="w3-input w3-border" type="text" placeholder="Email" required name="Email"></p>
       <p><input class="w3-input w3-border" type="text" placeholder="Тема" required name="Тема"></p>
       <p><input class="w3-input w3-border" type="text" placeholder="Сообщение" required name="Сообщение"></p> -->
-	  {{ form.as_p }}
+	  {% csrf_token %}
+	  {{comment_form.as_p}}
       <p>
         <button class="w3-button w3-black" type="submit">
           <i class="fa fa-paper-plane"></i> ОТПРАВИТЬ
@@ -51,8 +52,24 @@ body, html {
     
   </div>
 </div>
+<br>
+<div class="w3-container w3-light-grey" style="padding:128px 16px" id="contact">
+  <h3 class="w3-center">ВСЕ КОММЕНТАРИИ</h3>
+  <div style="margin-top:48px">
+    <br>
+	{% for item in values %}
 
-{% include "Footer.html" %}
+      <p class="w3-input w3-border">< {{item.user}} ></p>
+      <p class="w3-input w3-border">< {{item.content}} ></p>
+      <p class="w3-input w3-border">< {{item.post}} ></p>
+
+
+    {% endfor %}
+  </div>
+</div>
+
+
+
  
 <script>
 // Modal Image Gallery

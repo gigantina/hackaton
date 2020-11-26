@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from TestApp.models import Events
 from TestApp.models import Donate
 from TestApp.models import Users
+from TestApp.models import Comment
+from TestApp.models import Post
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
@@ -17,6 +19,7 @@ from django.contrib.auth import logout
 from .forms import LoginForm
 from .forms import EditProfile
 from .forms import RegisterForm
+from .forms import CommentForm
 from django.core.mail import send_mail
 from .forms import CommentsForm
 from django.shortcuts import (HttpResponse, render, redirect, get_object_or_404, reverse, get_list_or_404, Http404)
@@ -136,10 +139,33 @@ def edit_profile(request):
         form = EditProfile(request.POST, instance=request.user)
 
         if form.is_valid():
-            form.save()бюхз-даукв
+            form.save()
             return redirect('Profile.html')
 
     else:
         form = EditProfile(instance=request.user)
         args = {'form': form}
         return render(request, 'EditProfile.html', args)
+
+
+def post_detailview(request, id):
+    if request.method == 'POST':
+        cf = CommentForm(request.POST or None)
+        if cf.is_valid():
+            content = request.POST.get('content')
+            comment = Comment.objects.create(post=post, user=request.user, content=content)
+            comment.save()
+            return redirect(post.get_absolute_url())
+        else:
+            cf = CommentForm()
+
+        context = {
+            'comment_form': cf,
+        }
+        return render(request, 'socio / post_detail.html', context)
+
+def comments_show(request):
+    context = dict()
+    history = Comment.objects.all()
+    context['values'] = history
+    return render(request, 'Comments.html', context)
