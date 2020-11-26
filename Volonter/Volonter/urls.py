@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from TestApp import views
 from django.conf.urls import url
-from django.contrib.auth.views import login, logout, password_reset, password_reset_done, password_reset_confirm, password_reset_complete
+from django.contrib.auth import as auth_views
+from . import views
 
 urlpatterns = [
     path('', views.main_page),
@@ -32,9 +33,20 @@ urlpatterns = [
 	url(r'^profile/$', views.view_profile, name='view_profile'),
 	url(r'^profile/edit/$', views.edit_profile, name='edit_profile'),
 	path('/comment/', AddCommentView.as_view(), name='add_comment'),
-	url(r'^change-password/$', views.change_password, name='change_password'),
-	url(r'^reset_password/$', password_reset, name='reset_password'),
-	url(r'^reset_password/done/$', password_reset_done, name='reset_password_done'),
-	url(r'^reset_password/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?)$P<token>+/$', password_reset_confirm, name='reset_password_confirm'),
-	url(r'^reset_password/complete/$', password_reset_complete, name='reset_password_complete'),
+	
+	#url(r'^change-password/$', views.change_password, name='change_password'),
+	url(r'^reset_password/$', auth_views.PasswordResetView.as_view(template_name="password_reset.html"), name='reset_password'),
+	url(r'^reset_password_sent/$', auth_views.PasswordResetDoneView.as_view(template_name="password_reset_sent.html"), name='password_reset_done'),
+	url(r'^reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_form.html), name='password_reset_confirm'),
+	url(r'^reset_password_complete/$', auth_views.PasswordResetCompleteView.as_view(template_name="password_reset_done.html"), name='password_reset_complete'),
 ]
+
+
+
+
+
+
+
+
+
+

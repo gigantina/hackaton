@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<title>Volunteer Reset Password</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+
+/* Full height image header */
+.bgimg-1 {
+  background-position: center;
+  background-size: cover;
+  background-image: url("/w3images/mac.jpg");
+  min-height: 100%;
+}
+
+.w3-bar .w3-button {
+  padding: 16px;
+}
+</style>
+<body>
+
+<!-- Navbar (sit on top) -->
+{% include "Menu.html" %}
+
+<!--Login Section -->
+<div class="w3-container w3-light-grey" style="padding:128px 16px" id="contact">
+  <h3 class="w3-center">ВВЕДИТЕ НОВЫЙ ПАРОЛЬ</h3>
+  <p> Введите свой новый пароль дважды, чтобы убедиться в его правильности </p>
+  <div style="margin-top:48px">
+    
+    <form method="POST" target="_blank">
+      <!--<p><input class="w3-input w3-border" type="text" placeholder="Email" name="Email"></p>
+      <p><input class="w3-input w3-border" type="text" placeholder="Пароль" name="Password"></p> -->
+	  {% csrf_token %}
+	  <p> {{ form }} </p>
+      <p>
+        <button class="w3-button w3-black" type="submit" name="UpdatePassword">
+          <i ></i> ВВЕСТИ
+        </button>
+      </p>
+    </form>
+
+    
+  </div>
+</div>
+
+{% include "Footer.html" %}
+
+
+</body>
+</html>
