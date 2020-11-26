@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from TestApp.models import Event
 from TestApp.models import Donate
 from TestApp.models import Profile
-from TestApp.models import Bookings_From_User, CategoryHelp, UuidAndEmail
+from TestApp.models import Bookings_From_User, CategoryHelp, UuidAndEmail, Achievment, Achievments_From_User
 from .mail import *
 
 from django.contrib.auth.models import User
@@ -67,9 +67,20 @@ def book(request, ides):
 
 
 def achievements_user(request):
-    user = Profile.objects.get(id=2)
-    notify.send(user, recipient=user, verb='you reached level 10')
-    return redirect('http://localhost:8000/')
+    context = dict()
+    history = Achievment.objects.all()
+    context['open'] = []
+    context['closed'] = []
+    for achieve in history:
+        try:
+            user = Profile.objects.get(id=request.user.id)
+            a = Achievments_From_User.objects.get(user_id=user, achive_id=achieve)
+            if a:
+                context['open'].append(achieve)
+        except:
+            context['closed'].append(achieve)
+
+    return render(request, 'Achieve.html', context)
 
 
 def donate_page(request, pk):
@@ -153,6 +164,11 @@ def register_page(request):
             uu = get_uuid()
             item = UuidAndEmail(uuid=uu, email=email, action=0)
             item.save()
+            user = Profile.objects.get(email=email)
+            achieve = Achievment.objects.get(id=1)
+
+            achieve_from_user = Achievments_From_User(user_id=user, achive_id=achieve)
+            achieve_from_user.save()
             registration('natalyastareeva@gmail.com', email, name, f'http://localhost:8000/registration/wait/{uu}')
             return HttpResponseRedirect(f'wait/', 'Profile.html')
         else:
@@ -173,6 +189,7 @@ def complete_reg(request, uu):
         profile = Profile.objects.get(email=item.email)
         profile.is_active = 1
         profile.save()
+
         return redirect('http://localhost:8000/account/')
     except Exception as e:
         return redirect('http://localhost:8000/')

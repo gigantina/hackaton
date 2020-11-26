@@ -35,3 +35,4 @@ def registration(from_, to, name, a, action=0, password='mockba91'):
     s.sendmail(msg['From'], [msg['To']], msg.as_string().encode('utf-8'))
 
 # registration('gigantina.ru@gmail.com', 'gigandev@gmail.com', 'loveCaOH2', 'Пупкин Вася')
+

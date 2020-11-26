@@ -70,3 +70,5 @@ class UuidAndEmail(models.Model):
     uuid = models.CharField(max_length=60)
     email = models.CharField(max_length=200)
     action = models.IntegerField()
+
+
