@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html>
 
 <meta charset="UTF-8">
@@ -32,23 +32,26 @@ body, html {
 
 <!-- Contact Section -->
 <div class="w3-container w3-light-grey" style="padding:128px 16px" id="contact">
-  <h3 class="w3-center">КОММЕНТАРИИ</h3>
-  <p class="w3-center w3-large">Есть вопросы или пожелания? Пошлите нам сообщение:</p>
+  <h3 class="w3-center">ДОБАВИТЬ КОММЕНТАРИЙ</h3>
   <div style="margin-top:48px">
     <br>
-	{% if not post.comments.all %}
-	  <p class="w3-center w3-large">Нет комментариев <a href="{% url 'add_comment' %}"></p>
-	{% else %}
-	<p class="w3-center w3-large">Добавить комменрарий <a href="{% url 'add_comment' %}"></p>
-		{% for comment in post.comments.all %}
-		  <p class="w3-input w3-border">< {{comment.name}} ></p>
-		  <p class="w3-input w3-border">< {{comment.date_added}} ></p>
-		  <p class="w3-input w3-border">< {{comment.body}} ></p>
-		
-		{% endfor %}
-	{% endif %}
+    <form method="POST" target="_blank">
+      <!-- <p><input class="w3-input w3-border" type="text" placeholder="Имя" required name="Имя" ></p>
+      <p><input class="w3-input w3-border" type="text" placeholder="Email" required name="Email"></p>
+      <p><input class="w3-input w3-border" type="text" placeholder="Тема" required name="Тема"></p>
+      <p><input class="w3-input w3-border" type="text" placeholder="Сообщение" required name="Сообщение"></p> -->
+	  {% csrf_token %}
+	  {{form.as_p}}
+      <p>
+        <button class="w3-button w3-black" type="submit">
+          <i class="fa fa-paper-plane"></i> ДОБАВИТЬ
+        </button>
+      </p>
+    </form>
+    
   </div>
 </div>
+
 
 
 

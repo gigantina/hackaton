@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
-from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView, CreateView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -169,3 +170,11 @@ def comments_show(request):
     history = Comment.objects.all()
     context['values'] = history
     return render(request, 'Comments.html', context)
+
+####### OR THIS WAY
+class AddCommentView(CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'add_comment.html'
+    success_url = reverse_lazy('About.html')
+

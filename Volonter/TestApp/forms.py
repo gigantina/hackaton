@@ -35,5 +35,14 @@ class EditProfile(RegisterForm):
     class Meta:
         model = User
         fields = ('name', 'email', 'phone', 'address', 'password')
+ #######Or this way
+ class CommentFrom(forms.ModelForm):
+     class Meta:
+         model = Comment
+         fields = ('name', 'body')
+         widgets = {
+             'name': forms.TextInput(attrs={'class': 'form-control'}),
+             'body': forms.Textarea(attrs={'class': 'form-control'})
+         }
 
 

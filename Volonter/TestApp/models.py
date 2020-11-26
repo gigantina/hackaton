@@ -32,7 +32,7 @@ class Comment(models.Model):
   user = models.ForeignKey(User, on_delete = models.CASCADE)
   content = models.TextField()
 
-class Post(models.Model):
+class Post(models.ModelForm):
     image = models.ImageField()
     default="default_foo.png", upload_to="post_picture")
     caption = models.TextField()
@@ -55,3 +55,13 @@ class Post(models.Model):
 
         #ie = Events(date='12/12/12', title="Разз ва", description='dfgef', src='123.jpg')
 #ie.save()
+
+######OR THIS WAY
+class Comment(model.Models):
+    post = models.ForeignKey(Post, related_name=post)
+    name = models.CharField()
+    body = models.TextField()
+    date_added = models.DateTimeField()
+
+    def __str__ (self):
+        return '%s - %s' % (self.post.name)
