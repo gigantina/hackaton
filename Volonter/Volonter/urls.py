@@ -16,14 +16,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from TestApp import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
+
     path('', views.main_page),
-    path('donate/', views.donate_page),
-    path('events', views.events_page),
+    path('events/', views.events_page),
     path('admin/', admin.site.urls),
-    path('events/<int:pk>', views.event_page),
-    path('book/', views.book),
+    path('events/<int:pk>/', views.event_page),
+    path('events/book/<int:ides>', views.book),
     path('login/', views.get_login),
-    path('registration/', views.register_page)
-    ]
+    path('registration/', views.register_page),
+    path('account/', views.profile_page),
+    path('logout/', views.logout),
+    path('donates/', views.donates_page),
+    path('donates/<int:pk>/', views.donate_page)
+]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

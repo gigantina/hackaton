@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from TestApp.models import Events
+from TestApp.models import Event
 from TestApp.models import Donate
 from TestApp.models import Profile
+from TestApp.models import Bookings_From_User
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -17,10 +18,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from .forms import LoginForm
 from .forms import RegisterForm
+from .forms import EventForm
 from django.core.mail import send_mail
 from .forms import CommentsForm
 from django.shortcuts import (HttpResponse, render, redirect, get_object_or_404, reverse, get_list_or_404, Http404)
 from django.core.paginator import Paginator
+from django.contrib.auth import login
+from .auth import MyBackend
 
 
 def main_page(request):
@@ -29,30 +33,59 @@ def main_page(request):
 
 def events_page(request):
     context = dict()
-    history = Events.objects.all()
+    history = Event.objects.all()
     context['values'] = history
+
     return render(request, 'Events.html', context)
 
 
 def event_page(request, pk):
     context = dict()
-    print(request)
-    history = Events.objects.filter(id=pk)
+    history = Event.objects.filter(id=pk)
+    book = Bookings_From_User.objects.filter(user_id=request.user.id, event_id=pk)
+    if book:
+        status = 'Вы записаны!'
+    else:
+        status = ''
     context['values'] = history
+    context['status'] = status
     return render(request, 'Event.html', context)
 
 
 @login_required
-def book(request):
-    if request.method == 'POST':
-        print('OK!')
+def book(request, ides):
+    ides = str(ides)
+    user_id, event_id = int(ides[0]), int(ides[1])
+    user = Profile.objects.get(id=user_id)
+    event = Event.objects.get(id=event_id)
+    item = Bookings_From_User(event_id=event, user_id=user)
+    item.save()
+    return redirect('/events')
 
 
-def donate_page(request):
+def donate_page(request, pk):
+    context = dict()
+    history = Donate.objects.filter(id=pk)
+    book = Bookings_From_User.objects.filter(user_id=request.user.id, event_id=pk)
+    if book:
+        status = 'Вы записаны!'
+    else:
+        status = ''
+    context['values'] = history
+    context['status'] = status
+    return render(request, 'Donate.html', context)
+
+
+def donates_page(request):
     context = dict()
     history = Donate.objects.all()
     context['values'] = history
-    return render(request, 'Donate.html')
+
+    return render(request, 'Donates.html', context)
+
+
+def auth(request):
+    return redirect('/account')
 
 
 def get_login(request):
@@ -66,11 +99,16 @@ def get_login(request):
             # ...
             # redirect to a new URL:
             history = Profile.objects.all()
-            for item in history:
-                if ((item.email == form.data['email']) and (item.password == form.data['password'])):
-                    return HttpResponseRedirect('/Добро пожаловать в личный кабинет/', 'Profile.html')
-                else:
-                    continue
+            email, password = form.data['email'], form.data['password']
+            print(email, password)
+            back = MyBackend()
+            user = back.authenticate(request, email=email, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect('/account/')
+            else:
+                print('(')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -91,7 +129,7 @@ def register_page(request):
             profile = Profile(name=name, email=email, password=password, phone=phone,
                               address=address)
             profile.save()
-            return HttpResponseRedirect('/Добро пожаловать в личный кабинет/', 'Profile.html')
+            return HttpResponseRedirect('/account/', 'Profile.html')
         else:
             print(form)
 
@@ -101,30 +139,23 @@ def register_page(request):
 
 
 @login_required
-def profile_page(request, id):
-    user = get_object_or_404(Profile, id=id)
-    # if the profile is private and logged in user is not same as the user being viewed,
-    # show 404 error
-    if user.profile.private and request.user.username != user.username:
-        raise Http404
+def profile_page(request):
+    user = get_object_or_404(Profile, id=request.user.id)
+    context = dict()
+    context['values'] = user
+    print(context['values'])
+    # user.profile.save()
+    a = Bookings_From_User.objects.filter(user_id=user)
+    for i in a:
+        print(i)
+    context['events'] = a
 
-    # if the profile is not private and logged in user is not same as the user being viewed,
-    # then only show public snippets of the user
-    else:
-        name = user.name
-        email = user.email
-        phone = user.phone
-        address = user.address
-        user.profile.save()
-
-    snippets = Paginator(request, name, email, phone, address, 5)
-
-    return render(request, '', {'snippets': snippets})
+    return render(request, 'Profile.html', context)
 
 
 def logout(request):
     auth_logout(request)
-    return render(request, 'index.html')
+    return redirect('/')
 
 
 @login_required

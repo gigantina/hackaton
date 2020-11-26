@@ -25,6 +25,7 @@ body, html {
 .w3-bar .w3-button {
   padding: 16px;
 }
+
 </style>
 <body>
 
@@ -32,54 +33,27 @@ body, html {
 
 <!-- Contact Section -->
 <div class="w3-container w3-light-grey" style="padding:128px 16px" id="contact">
-  <h3 class="w3-center">КОММЕНТАРИИ</h3>
-  <p class="w3-center w3-large">Есть вопросы или пожелания? Пошлите нам сообщение:</p>
-  <div style="margin-top:48px">
-    <br>
-    <form action="/comments" method="POST" target="_blank">
-      <!-- <p><input class="w3-input w3-border" type="text" placeholder="Имя" required name="Имя" ></p>
-      <p><input class="w3-input w3-border" type="text" placeholder="Email" required name="Email"></p>
-      <p><input class="w3-input w3-border" type="text" placeholder="Тема" required name="Тема"></p>
-      <p><input class="w3-input w3-border" type="text" placeholder="Сообщение" required name="Сообщение"></p> -->
-	  {{ form.as_p }}
-      <p>
-        <button class="w3-button w3-black" type="submit">
-          <i class="fa fa-paper-plane"></i> ОТПРАВИТЬ
-        </button>
-      </p>
-    </form>
-    
-  </div>
+    <h3 class="w3-center">КОММЕНТАРИИ</h3>
+    <p class="w3-center w3-large">Есть вопросы или пожелания? Пошлите нам сообщение:</p>
+    <div style="margin-top:48px">
+        <br>
+        <form action="/comments" method="POST" target="_blank">
+            <!-- <p><input class="w3-input w3-border" type="text" placeholder="Имя" required name="Имя" ></p>
+            <p><input class="w3-input w3-border" type="text" placeholder="Email" required name="Email"></p>
+            <p><input class="w3-input w3-border" type="text" placeholder="Тема" required name="Тема"></p>
+            <p><input class="w3-input w3-border" type="text" placeholder="Сообщение" required name="Сообщение"></p> -->
+            {{ form.as_p }}
+            <p>
+                <button class="w3-button w3-black" type="submit">
+                    <i class="fa fa-paper-plane"></i> ОТПРАВИТЬ
+                </button>
+            </p>
+        </form>
+
+    </div>
 </div>
 
 {% include "Footer.html" %}
- 
-<script>
-// Modal Image Gallery
-function onClick(element) {
-  document.getElementById("img01").src = element.src;
-  document.getElementById("modal01").style.display = "block";
-  var captionText = document.getElementById("caption");
-  captionText.innerHTML = element.alt;
-}
-
-
-// Toggle between showing and hiding the sidebar when clicking the menu icon
-var mySidebar = document.getElementById("mySidebar");
-
-function w3_open() {
-  if (mySidebar.style.display === 'block') {
-    mySidebar.style.display = 'none';
-  } else {
-    mySidebar.style.display = 'block';
-  }
-}
-
-// Close the sidebar with the close button
-function w3_close() {
-    mySidebar.style.display = "none";
-}
-</script>
 
 </body>
 </html>

@@ -3,42 +3,45 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
 
-class Events(models.Model):
+class Event(models.Model):
     id = models.AutoField(primary_key=True)
-    startDate = models.TextField()
-    endDate = models.TextField()
-    title = models.TextField()
-    description = models.TextField()
-    img = models.ImageField(upload_to='upload/', default='static/hehe.jpg')
+    startDate = models.CharField(max_length=20)
+    endDate = models.CharField(max_length=20)
+    title = models.CharField(max_length=25)
+    description = models.CharField(max_length=200)
+    long_description = models.TextField(null=True)
+    img = models.ImageField(blank=True, upload_to='images/')
     address = models.TextField()
 
 
 class Donate(models.Model):
     id = models.AutoField(primary_key=True)
-    startDate = models.TextField()
-    endDate = models.TextField()
-    title = models.TextField()
-    description = models.TextField()
+    startDate = models.CharField(max_length=20)
+    endDate = models.CharField(max_length=20)
+    title = models.CharField(max_length=25)
+    description = models.CharField(max_length=200)
+    long_description = models.TextField(null=True)
     totalPrice = models.IntegerField()
-    img = models.ImageField(upload_to='upload/', default='static/hehe.jpg')
+    img = models.ImageField(blank=True, upload_to='images/')
 
 
 class Profile(AbstractUser):
     id = models.AutoField(primary_key=True)
-    name = models.TextField(default='None')
+    name = models.CharField(default='None', max_length=30)
     email = models.EmailField(default='admin@admin.com')
-    password = models.TextField(default='None')
-    phone = models.TextField(default='None')
+    username = models.CharField(unique=True, max_length=20)
+    password = models.CharField(default='None', max_length=20)
+    phone = models.CharField(default='None', max_length=16)
     address = models.TextField(default='None')
 
 
-class Booking(models.Model):
+class Bookings_From_User(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(to=Profile, on_delete=models.SET_NULL, null=True)
-    event_id = models.ForeignKey(to=Events, on_delete=models.SET_NULL, null=True)
+    event_id = models.ForeignKey(to=Event, on_delete=models.SET_NULL, null=True)
 
 
-class Donates(models.Model):
+class Donates_From_User(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(to=Profile, on_delete=models.SET_NULL, null=True)
     donate_id = models.ForeignKey(to=Donate, on_delete=models.SET_NULL, null=True)
