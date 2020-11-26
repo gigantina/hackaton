@@ -3,9 +3,7 @@ from django.http import HttpResponse
 from TestApp.models import Event
 from TestApp.models import Donate
 from TestApp.models import Profile
-from TestApp.models import Bookings_From_User, CategoryHelp, UuidAndEmail
-from .mail import *
-
+from TestApp.models import Bookings_From_User
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -27,7 +25,6 @@ from django.shortcuts import (HttpResponse, render, redirect, get_object_or_404,
 from django.core.paginator import Paginator
 from django.contrib.auth import login
 from .auth import MyBackend
-from notifications.signals import notify
 
 
 def main_page(request):
@@ -66,12 +63,6 @@ def book(request, ides):
     return redirect('/events')
 
 
-def achievements_user(request):
-    user = Profile.objects.get(id=2)
-    notify.send(user, recipient=user, verb='you reached level 10')
-    return redirect('http://localhost:8000/')
-
-
 def donate_page(request, pk):
     context = dict()
     history = Donate.objects.filter(id=pk)
@@ -83,13 +74,6 @@ def donate_page(request, pk):
     context['values'] = history
     context['status'] = status
     return render(request, 'Donate.html', context)
-
-
-def event_category(request, pk):
-    context = dict()
-    history = Event.objects.filter(category_help=CategoryHelp.objects.get(id=pk))
-    context['values'] = history
-    return render(request, 'Events.html', context)
 
 
 def donates_page(request):
@@ -133,49 +117,25 @@ def get_login(request):
     return render(request, 'Login.html', {'form': form})
 
 
-def about_page(request):
-    return render(request, 'About.html')
-
-
 def register_page(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = RegisterForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            name, email, phone, address = form.data['name'], form.data['email'], \
-                                          form.data['phone'], form.data[
-                                              'address']
-            password = form.data['password1']
+            name, email, password, phone, address = form.data['name'], form.data['email'], form.data['password'], \
+                                                    form.data['phone'], form.data[
+                                                        'address']
             profile = Profile(name=name, email=email, password=password, phone=phone,
-                              address=address, username=email, is_active=0)
+                              address=address)
             profile.save()
-            uu = get_uuid()
-            item = UuidAndEmail(uuid=uu, email=email, action=0)
-            item.save()
-            registration('natalyastareeva@gmail.com', email, name, f'http://localhost:8000/registration/wait/{uu}')
-            return HttpResponseRedirect(f'wait/', 'Profile.html')
+            return HttpResponseRedirect('/account/', 'Profile.html')
         else:
             print(form)
 
     else:
         form = RegisterForm()
     return render(request, 'Registration.html', {'form': form})
-
-
-def reg_wait(request):
-    return render(request, 'Wait.html')
-
-
-def complete_reg(request, uu):
-    try:
-        item = UuidAndEmail.objects.get(uuid=uu)
-        profile = Profile.objects.get(email=item.email)
-        profile.is_active = 1
-        profile.save()
-        return redirect('http://localhost:8000/account/')
-    except Exception as e:
-        return redirect('http://localhost:8000/')
 
 
 @login_required

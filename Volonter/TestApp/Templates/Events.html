@@ -32,12 +32,6 @@ body, html {
 
 
 
-
-
-
-
-
-
 </style>
 <body>
 
@@ -56,12 +50,11 @@ body, html {
                 <div class="w3-container">
                     <h3>{{ item.title }}</h3>
                     {% if item.endDate == item.startDate%}
-                    <p class="w3-opacity">{{ item.startDate }}</p>
+                    <p class="w3-opacity">{{ item.startDate}}</p>
                     {% else %}
                     <p class="w3-opacity">
                         {{ item.startDate }} - {{ item.endDate }}</p>
                     {% endif %}
-                    <a href="localhost:8000/events/cat/{{item.category_help.id}}/"><p>#{{item.category_help.name}}</p></a>
                     <p>{{ item.description }}</p>
                     <form action="http://localhost:8000/events/{{ item.id }}">
                         <button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i>Подробнее

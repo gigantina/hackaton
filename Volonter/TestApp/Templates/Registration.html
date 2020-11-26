@@ -37,10 +37,6 @@ body, html {
 
 
 
-
-
-
-
 </style>
 <body>
 
@@ -55,7 +51,9 @@ body, html {
 
             <form action="/registration/" method="POST" target="_blank">
                 {% csrf_token %}
-                {{form.as_p}}
+                <p>{% for field in form%}</p>
+                {{field}}
+                {% endfor %}
                 <br>
                 <button class="w3-button w3-black" type="submit">
                     <i></i> ЗАРЕГЕСТРИРОВАТЬСЯ
