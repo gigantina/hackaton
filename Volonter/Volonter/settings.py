@@ -25,7 +25,7 @@ SECRET_KEY = '*ii0irxuf9dth+k-_+gx)0y@n@m8e_t$0^7eeyap0l#_7u5)n('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['Ruslan1.pythonanywhere.com']
+ALLOWED_HOSTS = ['ruslan01.pythonanywhere.com']
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/login/'
