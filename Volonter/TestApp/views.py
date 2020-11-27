@@ -220,7 +220,7 @@ def register_page(request):
 
             achieve_from_user = Achievments_From_User(user_id=user, achive_id=achieve)
             achieve_from_user.save()
-            registration(email, name, a=f'http://localhost:8000/registration/wait/{uu}')
+            registration(email, name, a=f'https://Ruslan1.pythonanywhere.com/registration/wait/{uu}')
             return HttpResponseRedirect(f'wait/', 'Profile.html')
         else:
             print(form)
@@ -241,9 +241,9 @@ def complete_reg(request, uu):
         profile.is_active = 1
         profile.save()
 
-        return redirect('http://localhost:8000/account/')
+        return redirect('https://Ruslan1.pythonanywhere.com/account/')
     except Exception as e:
-        return redirect('http://localhost:8000/')
+        return redirect('https://Ruslan1.pythonanywhere.com/')
 
 
 @login_required

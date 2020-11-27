@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '*ii0irxuf9dth+k-_+gx)0y@n@m8e_t$0^7eeyap0l#_7u5)n('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['Ruslan1.pythonanywhere.com']
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/login/'
@@ -123,7 +123,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-#SMTP CONFIG
+# SMTP CONFIG
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '578'
